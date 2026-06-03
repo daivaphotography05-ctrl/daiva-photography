@@ -66,44 +66,15 @@ if(heroImage){
 }
 
 
-/* =========================================================
-   SCROLL REVEAL ANIMATION
-   ========================================================= */
-const revealElements =
-document.querySelectorAll(
-".reveal, .section-title, .stat-card, .gallery-item, .achievement-card, .category-card, .timeline-item"
-);
 
-const revealObserver =
-new IntersectionObserver((entries)=>{
-
-    entries.forEach(entry=>{
-
-        if(entry.isIntersecting){
-
-            entry.target.classList.add("active");
-
-        }
-
-    });
-
-},{
-    threshold:.15
-});
-
-revealElements.forEach(el=>{
-
-    revealObserver.observe(el);
-
-});
 
 
 /* =========================================================
-   STAGGER ANIMATION
+   STAGGER ANIMATION (ONE TIME ONLY)
    ========================================================= */
-const staggerItems =
-document.querySelectorAll(
-".gallery-item,.stat-card,.achievement-card,.category-card"
+
+const staggerItems = document.querySelectorAll(
+".gallery-item,.stat-card,.achievement-card,.category-card,.timeline-item"
 );
 
 staggerItems.forEach((item,index)=>{
@@ -111,33 +82,32 @@ staggerItems.forEach((item,index)=>{
     item.style.opacity = "0";
     item.style.transform = "translateY(50px)";
 
-    const observer =
-    new IntersectionObserver(entries=>{
+    const observer = new IntersectionObserver((entries)=>{
 
-        if(entries[0].isIntersecting){
+        if(!entries[0].isIntersecting) return;
 
-            setTimeout(()=>{
+        setTimeout(()=>{
 
-                item.style.transition =
-                ".8s ease";
+            item.style.transition =
+            "all .8s ease";
 
-                item.style.opacity =
-                "1";
+            item.style.opacity =
+            "1";
 
-                item.style.transform =
-                "translateY(0px)";
+            item.style.transform =
+            "translateY(0)";
 
-            },index * 100);
+        },index * 80);
 
-        }
+        observer.unobserve(item);
 
+    },{
+        threshold:.15
     });
 
     observer.observe(item);
 
 });
-
-
 /* =========================================================
    ANIMATED GOOGLE MAPS COUNTERS
    ========================================================= */
@@ -480,28 +450,29 @@ opacity:0;
 /* =========================================================
    TIMELINE GLOW ON VIEW
    ========================================================= */
+
 const timelineItems =
-document.querySelectorAll(
-".timeline-item"
-);
+document.querySelectorAll(".timeline-item");
 
 const timelineObserver =
-new IntersectionObserver(entries=>{
+new IntersectionObserver((entries)=>{
 
     entries.forEach(entry=>{
 
-        if(entry.isIntersecting){
+        if(!entry.isIntersecting) return;
 
-            entry.target.style.boxShadow =
-            "0 0 30px rgba(212,175,55,.15)";
+        entry.target.style.boxShadow =
+        "0 0 30px rgba(212,175,55,.15)";
 
-            entry.target.style.padding =
-            "15px";
+        entry.target.style.padding =
+        "15px";
 
-            entry.target.style.borderRadius =
-            "15px";
+        entry.target.style.borderRadius =
+        "15px";
 
-        }
+        timelineObserver.unobserve(
+        entry.target
+        );
 
     });
 
@@ -514,7 +485,6 @@ timelineItems.forEach(item=>{
     timelineObserver.observe(item);
 
 });
-
 
 /* =========================================================
    BUTTON MAGNET EFFECT
@@ -558,58 +528,6 @@ buttons.forEach(button=>{
         "translate(0,0)";
 
     });
-
-});
-
-
-/* =========================================================
-   SMOOTH SECTION FADE-IN
-   ========================================================= */
-const sections =
-document.querySelectorAll("section");
-
-const sectionObserver =
-new IntersectionObserver(entries=>{
-
-    entries.forEach(entry=>{
-
-        if(entry.isIntersecting){
-
-            entry.target.animate(
-
-            [
-
-                {
-                    opacity:0,
-                    transform:
-                    "translateY(80px)"
-                },
-
-                {
-                    opacity:1,
-                    transform:
-                    "translateY(0px)"
-                }
-
-            ],
-
-            {
-                duration:1000,
-                easing:"ease-out",
-                fill:"forwards"
-            });
-
-        }
-
-    });
-
-},{
-    threshold:.1
-});
-
-sections.forEach(section=>{
-
-    sectionObserver.observe(section);
 
 });
 
